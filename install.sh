@@ -28,7 +28,7 @@ echo
 echo -e "$yellow此脚本仅兼容于Debian 10+系统. 如果你的系统不符合,请Ctrl+C退出脚本$none"
 echo -e "可以去 ${cyan}https://github.com/crazypeace/naive${none} 查看脚本整体思路和关键命令, 以便针对你自己的系统做出调整."
 echo -e "有问题加群 ${cyan}https://t.me/+D8aqonnCR3s1NTRl${none}"
-echo "本脚本支持带参数执行, 在参数中输入域名, 端口, 用户名, 密码. 详见GitHub."
+echo "本脚本支持带参数执行, 在参数中输入域名, 网络栈, 端口, 用户名, 密码. 详见GitHub."
 echo "----------------------------------------------------------------"
 
 # 执行脚本带参数
@@ -37,20 +37,33 @@ if [ $# -ge 1 ]; then
     # 第1个参数是 域名
     naive_domain=${1}
 
-    # 第2个参数是 端口
-    naive_port=${2}
+    # 第2个参数是搭在ipv4还是ipv6上
+    case ${2} in
+    4)
+        netstack=4
+        ;;
+    6)
+        netstack=6
+        ;;    
+    *) # initial
+        netstack="i"
+        ;;    
+    esac
+    
+    # 第3个参数是 端口
+    naive_port=${3}
     if [[ -z $naive_port ]]; then
-        naive_port=$(shuf -i20001-65535 -n1)
+        naive_port=443
     fi
     
-    #第3个参数是 用户名
-    naive_user=${3}
+    #第4个参数是 用户名
+    naive_user=${4}
     if [[ -z $naive_user ]]; then
         naive_user=$(openssl rand -hex 8)
     fi
 
-    #第4个参数是 密码
-    naive_pass=${4}
+    #第5个参数是 密码
+    naive_pass=${5}
     if [[ -z $naive_pass ]]; then 
         # 默认与用户名相等
         naive_pass=$naive_user
@@ -117,13 +130,68 @@ if [[ -z $naive_domain ]]; then
     done
 fi
 
+# 网络栈
+if [[ -z $netstack ]]; then
+    echo -e "如果你的小鸡是${magenta}双栈(同时有IPv4和IPv6的IP)${none}，请选择你把v2ray搭在哪个'网口'上"
+    echo "如果你不懂这段话是什么意思, 请直接回车"
+    read -p "$(echo -e "Input ${cyan}4${none} for IPv4, ${cyan}6${none} for IPv6:") " netstack
+    if [[ $netstack == "4" ]]; then
+        domain_resolve=$(curl -sH 'accept: application/dns-json' "https://cloudflare-dns.com/dns-query?name=$naive_domain&type=A" | jq -r '.Answer[0].data')
+    elif [[ $netstack == "6" ]]; then 
+        domain_resolve=$(curl -sH 'accept: application/dns-json' "https://cloudflare-dns.com/dns-query?name=$naive_domain&type=AAAA" | jq -r '.Answer[0].data')
+    else
+        domain_resolve=$(curl -sH 'accept: application/dns-json' "https://cloudflare-dns.com/dns-query?name=$naive_domain&type=A" | jq -r '.Answer[0].data')
+        if [[ "$domain_resolve" != "null" ]]; then
+            netstack="4"
+        else
+            domain_resolve=$(curl -sH 'accept: application/dns-json' "https://cloudflare-dns.com/dns-query?name=$naive_domain&type=AAAA" | jq -r '.Answer[0].data')            
+            if [[ "$domain_resolve" != "null" ]]; then
+                netstack="6"
+            fi
+        fi
+    fi
+
+    # 本机 IP
+    if [[ $netstack == "4" ]]; then
+        ip=$(curl -4 -s https://api.myip.la)
+    elif [[ $netstack == "6" ]]; then 
+        ip=$(curl -6 -s https://api.myip.la)
+    else
+        ip=$(curl -s https://api.myip.la)
+    fi
+
+    if [[ $domain_resolve != $ip ]]; then
+        echo
+        echo -e "$red 域名解析错误Domain resolution error....$none"
+        echo
+        echo -e " 你的域名: $yellow$domain$none 未解析到: $cyan$ip$none"
+        echo
+        if [[ $domain_resolve != "null" ]]; then
+            echo -e " 你的域名当前解析到: $cyan$domain_resolve$none"
+        else
+            echo -e " $red检测不到域名解析Domain not resolved $none "
+        fi
+        echo
+        echo -e "备注...如果你的域名是使用$yellow Cloudflare $none解析的话... 在 DNS 设置页面, 请将$yellow代理状态$none设置为$yellow仅限DNS$none, 小云朵变灰."
+        echo "Notice...If you use Cloudflare to resolve your domain, on 'DNS' setting page, 'Proxy status' should be 'DNS only' but not 'Proxied'."
+        echo
+        exit 1
+    else
+        echo
+        echo
+        echo -e "$yellow 域名解析 = ${cyan}我确定已经有解析了$none"
+        echo "----------------------------------------------------------------"
+        echo
+    fi
+fi
+
 # 端口
 if [[ -z $naive_port ]]; then
-    random=$(shuf -i20001-65535 -n1)
+    default=443
     while :; do
         echo -e "请输入 ${yellow}端口${none} [${magenta}1-65535${none}], 不能选择 ${magenta}80${none}端口"
-        read -p "$(echo -e "(默认端口port: ${cyan}${random}$none):")" naive_port
-        [ -z "$naive_port" ] && naive_port=$random
+        read -p "$(echo -e "(默认端口port: ${cyan}${default}$none):")" naive_port
+        [ -z "$naive_port" ] && naive_port=$default
         case $naive_port in
         80)
             echo
