@@ -74,3 +74,9 @@ echo "hello world" > /var/www/html/index.html
 ```
 service caddy start
 ```
+
+# Uninstall
+```
+rm /etc/apt/sources.list.d/caddy-stable.list
+apt remove -y caddy
+```
