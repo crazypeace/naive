@@ -80,3 +80,33 @@ service caddy start
 rm /etc/apt/sources.list.d/caddy-stable.list
 apt remove -y caddy
 ```
+
+# 带参数执行
+如果你已经很熟悉了, 安装过程中的参数都确认没问题. 可以带参数使用本脚本, 跳过脚本中的各种校验.
+```
+bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) <domain> [netstack] [port] [username] [password]
+```
+其中
+
+`domain`      你的域名
+
+`netstask`    6 表示 IPv6入站, 最后会安装WARP获得IPv4出站
+
+`port` 你的端口
+
+`username` 你的用户名
+
+`password` 你的密码，如果不输入，会和用户名相同
+
+例如
+```
+bash <(curl -L https://github.com/crazypeace/v2ray_wss/raw/main/install.sh) abc.mydomain.com
+bash <(curl -L https://github.com/crazypeace/v2ray_wss/raw/main/install.sh) abccba.ipv6d.my.id 6
+bash <(curl -L https://github.com/crazypeace/v2ray_wss/raw/main/install.sh) abccba.ipv6d.my.id 6 14443
+bash <(curl -L https://github.com/crazypeace/v2ray_wss/raw/main/install.sh) abccba.ipv6d.my.id 6 14443 username
+bash <(curl -L https://github.com/crazypeace/v2ray_wss/raw/main/install.sh) abccba.ipv6d.my.id 6 14443 username password
+```
+
+## 用你的STAR告诉我这个Repo对你有用 Welcome STARs! :)
+
+[![Stargazers over time](https://starchart.cc/crazypeace/naive.svg)](https://starchart.cc/crazypeace/naive)
