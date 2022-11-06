@@ -108,12 +108,12 @@ cd caddy-forwardproxy-naive
 service caddy stop
 cp caddy /usr/bin/
 
-# 写个简单的html页面
+# xkcd密码生成器页面
 echo
-echo -e "$yellow写个简单的html页面$none"
+echo -e "$yellow xkcd密码生成器页面 $none"
 echo "----------------------------------------------------------------"
-mkdir -p /var/www/html
-echo "hello world" > /var/www/html/index.html
+rm -r /var/www/xkcdpw-html
+git clone https://github.com/crazypeace/xkcd-password-generator -b "master" /var/www/xkcdpw-html --depth=1
 
 # 域名
 if [[ -z $naive_domain ]]; then
@@ -268,7 +268,7 @@ sed -i "1i # _naive_config_begin_\n\
     probe_resistance\n\
   }\n\
   file_server {\n\
-    root /var/www/html\n\
+    root /var/www/xkcdpw-html\n\
   }\n\
 }\n\
 # _naive_config_end_" /etc/caddy/Caddyfile
