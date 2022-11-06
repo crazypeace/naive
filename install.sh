@@ -79,7 +79,7 @@ pause
 
 # 准备
 apt update
-apt install -y sudo curl wget
+apt install -y sudo curl wget git
 
 # 安装Caddy最新版
 echo
