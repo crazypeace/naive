@@ -337,3 +337,7 @@ echo -e "域名Domain: ${naive_domain}"
 echo -e "端口Port: ${naive_port}"
 echo -e "用户名Username: ${naive_user}"
 echo -e "密码Password: ${naive_pass}"
+
+echo
+echo "----------------------------------------------------------------"
+echo "END"
