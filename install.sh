@@ -108,7 +108,7 @@ case "$(uname -m)" in
 esac
 
 # 如果是 amd64 直接 下载NaïveProxy作者编译的caddy
-if [[ SYSTEM_ARCH == "amd64" ]]; then
+if [[ $SYSTEM_ARCH == "amd64" ]]; then
     echo
     echo -e "$yellow下载NaïveProxy作者编译的caddy 并替换caddy程序$none"
     echo "----------------------------------------------------------------"
