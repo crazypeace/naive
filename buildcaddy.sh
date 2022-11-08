@@ -2,6 +2,8 @@
 # https://github.com/shell-script/naivecaddy/blob/master/naivecaddy.sh
 # https://lhy.life/20211218-naiveproxy/
 
+echo "根据操作系统架构, 取最新版本Go编译环境, 编译NaïveProxy的Caddy"
+
 save_dir=$(pwd)
 
 GO_LATEST_VER=$(curl https://go.dev/VERSION?m=text)
