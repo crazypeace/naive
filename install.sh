@@ -139,7 +139,8 @@ if [[ "$not_rebuild" == [yY] ]]; then
     rm -r caddy-forwardproxy-naive
     wget https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz
     tar -xf caddy-forwardproxy-naive.tar.xz
-    cd caddy-forwardproxy-naive    
+    cd caddy-forwardproxy-naive
+    ./caddy version
 elif [[ "$not_rebuild" == [nN] ]]; then
     echo
     echo -e "$yellow自己编译NaïveProxy的caddy$none"
