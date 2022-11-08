@@ -15,8 +15,9 @@ _yellow() { echo -e ${yellow}$*${none}; }
 _magenta() { echo -e ${magenta}$*${none}; }
 _cyan() { echo -e ${cyan}$*${none}; }
 
-echo "根据操作系统架构, 取最新版本Go编译环境, 编译NaïveProxy的Caddy"
-echo "----------------"
+echo
+echo -e "${yellow}根据操作系统架构, 取最新版本Go编译环境, 编译NaïveProxy的Caddy${none}"
+echo "--------------------------------"
 
 save_dir=$(pwd)
 
