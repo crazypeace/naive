@@ -93,20 +93,48 @@ sudo apt install caddy
 
 systemctl enable caddy
 
-# 下载NaïveProxy作者编译的caddy 并替换caddy程序
-echo
-echo -e "$yellow下载NaïveProxy作者编译的caddy 并替换caddy程序$none"
-echo "----------------------------------------------------------------"
-cd /tmp
-rm caddy-forwardproxy-naive.tar.xz
-rm -r caddy-forwardproxy-naive
-wget https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz
-tar -xf caddy-forwardproxy-naive.tar.xz
-cd caddy-forwardproxy-naive
+# 判断系统架构
+case "$(uname -m)" in
+*aarch64* | *armv8*)
+  SYSTEM_ARCH="arm64"
+  ;;
+'amd64' | 'x86_64')
+  SYSTEM_ARCH="amd64"
+  ;;
+*)
+  SYSTEM_ARCH="$(uname -m)"
+  echo -e "${red}${SYSTEM_ARCH}${none}"
+  ;;
+esac
 
-# 替换caddy程序
-service caddy stop
-cp caddy /usr/bin/
+# 如果是 amd64 直接 下载NaïveProxy作者编译的caddy
+if [[ SYSTEM_ARCH == "amd64" ]]; then
+    echo
+    echo -e "$yellow下载NaïveProxy作者编译的caddy 并替换caddy程序$none"
+    echo "----------------------------------------------------------------"
+    cd /tmp
+    rm caddy-forwardproxy-naive.tar.xz
+    rm -r caddy-forwardproxy-naive
+    wget https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz
+    tar -xf caddy-forwardproxy-naive.tar.xz
+    cd caddy-forwardproxy-naive    
+
+    # 替换caddy程序
+    service caddy stop
+    cp caddy /usr/bin/
+
+else
+# 如果是别的架构, 需要自己编译 Caddy
+    echo
+    echo -e "$yellow自己编译NaïveProxy的caddy 并替换caddy程序$none"
+    echo "----------------------------------------------------------------"
+    cd /tmp
+    bash <( curl -L https://github.com/crazypeace/naive/raw/main/buildcaddy.sh)
+    
+    # 替换caddy程序
+    service caddy stop
+    cp caddy /usr/bin/
+fi
 
 # xkcd密码生成器页面
 echo
