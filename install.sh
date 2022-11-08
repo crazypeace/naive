@@ -33,6 +33,8 @@ echo "----------------------------------------------------------------"
 
 # 执行脚本带参数
 if [ $# -ge 1 ]; then
+    # 默认不重新编译
+    not_rebuild="Y"
 
     # 第1个参数是 域名
     naive_domain=${1}
@@ -95,20 +97,40 @@ systemctl enable caddy
 
 # 判断系统架构
 case "$(uname -m)" in
-*aarch64* | *armv8*)
-  SYSTEM_ARCH="arm64"
-  ;;
-'amd64' | 'x86_64')
-  SYSTEM_ARCH="amd64"
-  ;;
-*)
-  SYSTEM_ARCH="$(uname -m)"
-  echo -e "${red}${SYSTEM_ARCH}${none}"
-  ;;
+    *aarch64* | *armv8*)
+        SYSTEM_ARCH="arm64"
+        not_rebuild="N"    #必须自己编译
+        ;;
+    'amd64' | 'x86_64')
+        SYSTEM_ARCH="amd64"
+        ;;
+    *)
+        SYSTEM_ARCH="$(uname -m)"
+        echo -e "${red}${SYSTEM_ARCH}${none}"
+        not_rebuild="N"    #必须自己编译
+        ;;
 esac
 
-# 如果是 amd64 直接 下载NaïveProxy作者编译的caddy
-if [[ $SYSTEM_ARCH == "amd64" ]]; then
+# 是否自己编译
+if [[ -z $not_rebuild ]]; then
+    echo
+    echo -e "${yellow}本系统架构是${magenta}${SYSTEM_ARCH}${none}${yellow}, 你同意直接下载NaïveProxy作者编译好的Caddy吗?${none}"
+    echo -e "${magenta}Y${none}, 使用编译好的Caddy; ${magenta}n${none}, 重新编译. (直接回车默认${magenta}Y${none})"
+    while :; do 
+        read -p "(Y/n): " not_rebuild
+        [[ -z $not_rebuild ]] && not_rebuild="Y"
+        case "$not_rebuild" in
+            [yYnN])
+                break
+                ;;
+            *)
+                error
+                ;;
+        esac
+    done
+fi
+
+if [[ "$not_rebuild" == [yY] ]]; then
     echo
     echo -e "$yellow下载NaïveProxy作者编译的caddy 并替换caddy程序$none"
     echo "----------------------------------------------------------------"
@@ -118,23 +140,19 @@ if [[ $SYSTEM_ARCH == "amd64" ]]; then
     wget https://github.com/klzgrad/forwardproxy/releases/download/caddy2-naive-20221007/caddy-forwardproxy-naive.tar.xz
     tar -xf caddy-forwardproxy-naive.tar.xz
     cd caddy-forwardproxy-naive    
-
-    # 替换caddy程序
-    service caddy stop
-    cp caddy /usr/bin/
-
-else
-# 如果是别的架构, 需要自己编译 Caddy
+elif [[ "$not_rebuild" == [nN] ]]; then
     echo
     echo -e "$yellow自己编译NaïveProxy的caddy 并替换caddy程序$none"
     echo "----------------------------------------------------------------"
     cd /tmp
     bash <( curl -L https://github.com/crazypeace/naive/raw/main/buildcaddy.sh)
-    
-    # 替换caddy程序
-    service caddy stop
-    cp caddy /usr/bin/
+else
+    error
 fi
+
+# 替换caddy程序
+service caddy stop
+cp caddy /usr/bin/
 
 # xkcd密码生成器页面
 echo
