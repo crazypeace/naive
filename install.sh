@@ -132,7 +132,7 @@ fi
 
 if [[ "$not_rebuild" == [yY] ]]; then
     echo
-    echo -e "$yellow下载NaïveProxy作者编译的caddy 并替换caddy程序$none"
+    echo -e "$yellow下载NaïveProxy作者编译的caddy$none"
     echo "----------------------------------------------------------------"
     cd /tmp
     rm caddy-forwardproxy-naive.tar.xz
@@ -142,7 +142,7 @@ if [[ "$not_rebuild" == [yY] ]]; then
     cd caddy-forwardproxy-naive    
 elif [[ "$not_rebuild" == [nN] ]]; then
     echo
-    echo -e "$yellow自己编译NaïveProxy的caddy 并替换caddy程序$none"
+    echo -e "$yellow自己编译NaïveProxy的caddy$none"
     echo "----------------------------------------------------------------"
     cd /tmp
     bash <( curl -L https://github.com/crazypeace/naive/raw/main/buildcaddy.sh)
@@ -150,7 +150,10 @@ else
     error
 fi
 
-# 替换caddy程序
+# 替换caddy可执行文件
+echo
+echo -e "$yellow替换caddy可执行文件$none"
+echo "----------------------------------------------------------------"
 service caddy stop
 cp caddy /usr/bin/
 
