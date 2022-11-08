@@ -28,6 +28,6 @@ export PATH=$PATH:/usr/local/go/bin
 go version
 
 # 编译
-go get -u github.com/caddyserver/xcaddy/cmd/xcaddy
+go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
 ~/go/bin/xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive
 ./caddy version
