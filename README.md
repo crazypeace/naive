@@ -81,6 +81,10 @@ rm /etc/apt/sources.list.d/caddy-stable.list
 apt remove -y caddy
 ```
 
+# 如果希望和Caddy V2前置的VLESS/Vmess V2Ray共存
+需要先搭好V2Ray，教程:
+https://zelikk.blogspot.com/2022/11/naiveproxy-caddy-v2-vless-vmess-cdn.html
+
 # 带参数执行
 如果你已经很熟悉了, 安装过程中的参数都确认没问题. 可以带参数使用本脚本, 跳过脚本中的各种校验.
 ```
