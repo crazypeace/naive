@@ -323,9 +323,9 @@ sed -i "1i # _naive_config_begin_\n\
 }\n\
 # _naive_config_end_" /etc/caddy/Caddyfile
 
-# 启动NaïveProxy
+# 启动NaïveProxy服务端(Caddy)
 echo
-echo -e "$yellow启动NaïveProxy$none"
+echo -e "$yellow启动NaïveProxy服务端(Caddy)$none"
 echo "----------------------------------------------------------------"
 service caddy start
 
