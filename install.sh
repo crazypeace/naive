@@ -338,6 +338,22 @@ echo -e "端口Port: ${naive_port}"
 echo -e "用户名Username: ${naive_user}"
 echo -e "密码Password: ${naive_pass}"
 
+naive_url="https://$(echo -n \
+"${naive_user}:${naive_pass}@${naive_domain}:${naive_port}" \
+| base64 -w 0)"
+echo -e "${cyan}${naive_url}${none}"
+echo "以下两个二维码完全一样的内容"
+qrencode -t UTF8 $naive_url
+qrencode -t ANSI $naive_url
+
+echo "---------- END -------------"
+echo "以上节点信息保存在 ~/_naive_url_ 中"
+
+echo $naive_url > ~/_naive_url_
+echo "以下两个二维码完全一样的内容" >> ~/_naive_url_
+qrencode -t UTF8 $naive_url >> ~/_naive_url_
+qrencode -t ANSI $naive_url >> ~/_naive_url_
+
 echo
 echo "----------------------------------------------------------------"
 echo "END"
