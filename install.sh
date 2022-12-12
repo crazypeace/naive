@@ -81,7 +81,7 @@ pause
 
 # 准备
 apt update
-apt install -y sudo curl wget git jq
+apt install -y sudo curl wget git jq qrencode
 
 # 安装Caddy最新版
 echo
