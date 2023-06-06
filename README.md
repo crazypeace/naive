@@ -12,7 +12,10 @@ apt install -y curl
 bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh)
 ```
 
-脚本中很大部分都是在校验用户的输入。其实照着下面的内容自己配置就行了。
+脚本中很大部分都是在校验用户的输入。其实照着下面的步骤自己配置就行了。
+
+<details>
+    <summary>具体手搓步骤 (点击展开)</summary>
 
 # 安装CaddyV2最新版本
 source: https://caddyserver.com/docs/install#debian-ubuntu-raspbian
@@ -74,7 +77,10 @@ echo "hello world" > /var/www/html/index.html
 ```
 service caddy start
 ```
-
+  
+</details>
+  
+  
 # Uninstall
 ```
 rm /etc/apt/sources.list.d/caddy-stable.list
