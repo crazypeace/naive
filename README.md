@@ -113,10 +113,10 @@ bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) <domain>
 例如
 ```
 bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abc.mydomain.com
-bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abccba.ipv6d.my.id 6
-bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abccba.ipv6d.my.id 6 14443
-bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abccba.ipv6d.my.id 6 14443 username
-bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abccba.ipv6d.my.id 6 14443 username password
+bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abc.mydomain.com 6
+bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abc.mydomain.com 6 14443
+bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abc.mydomain.com 6 14443 username
+bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abc.mydomain.com 6 14443 username password
 ```
 
 ## 用你的STAR告诉我这个Repo对你有用 Welcome STARs! :)
