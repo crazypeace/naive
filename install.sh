@@ -25,7 +25,7 @@ pause() {
 
 # 说明
 echo
-echo -e "$yellow此脚本仅兼容于Debian 10+系统. 如果你的系统不符合,请Ctrl+C退出脚本$none"
+echo -e "$yellow此脚本仅兼容于 CentOS7+系统. 如果你的系统不符合,请Ctrl+C退出脚本$none"
 echo -e "可以去 ${cyan}https://github.com/crazypeace/naive${none} 查看脚本整体思路和关键命令, 以便针对你自己的系统做出调整."
 echo -e "有问题加群 ${cyan}https://t.me/+ISuvkzFGZPBhMzE1${none}"
 echo "本脚本支持带参数执行, 在参数中输入域名, 网络栈, 端口, 用户名, 密码. 详见GitHub."
@@ -80,20 +80,29 @@ fi
 pause
 
 # 准备
-apt update
-apt install -y sudo curl wget git jq qrencode
+# apt update
+#apt install -y sudo curl wget git jq qrencode
+yum clean -y all
+yum install -y curl wget git jq qrencode
 
 # 安装Caddy最新版
 echo
 echo -e "$yellow安装Caddy最新版本$none"
 echo "----------------------------------------------------------------"
-sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg --yes
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-sudo apt update
-sudo apt install caddy
+# sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+# curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg --yes
+# curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+# sudo apt update
+# sudo apt install caddy
 
+yum install -y yum-plugin-copr
+yum copr -y enable @caddy/caddy
+yum install -y caddy
 systemctl enable caddy
+
+# `caddy version`
+CADDY_VERSION="v2.7.4"
+
 
 # 判断系统架构
 case "$(uname -m)" in
@@ -137,7 +146,7 @@ if [[ "$not_rebuild" == [yY] ]]; then
     cd /tmp
     rm caddy-forwardproxy-naive.tar.xz
     rm -r caddy-forwardproxy-naive
-    wget https://github.com/klzgrad/forwardproxy/releases/download/v2.6.4-caddy2-naive/caddy-forwardproxy-naive.tar.xz
+    wget https://github.com/klzgrad/forwardproxy/releases/download/${CADDY_VERSION}-caddy2-naive/caddy-forwardproxy-naive.tar.xz
     tar -xf caddy-forwardproxy-naive.tar.xz
     cd caddy-forwardproxy-naive
     ./caddy version
@@ -327,7 +336,8 @@ sed -i "1i # _naive_config_begin_\n\
 echo
 echo -e "$yellow启动NaïveProxy服务端(Caddy)$none"
 echo "----------------------------------------------------------------"
-service caddy start
+systemctl start caddy
+systemctl status caddy
 
 # 输出参数
 echo
