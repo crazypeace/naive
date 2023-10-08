@@ -21,7 +21,7 @@ echo "--------------------------------"
 
 save_dir=$(pwd)
 
-GO_LATEST_VER=$(curl https://go.dev/VERSION?m=text)
+GO_LATEST_VER=$(curl https://go.dev/VERSION?m=text | head -1)
 
 case "$(uname -m)" in
 *aarch64* | *armv8*)
