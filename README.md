@@ -62,7 +62,7 @@ echo "hello world" > /var/www/html/index.html
 :自定义端口, 你的naive域名:自定义端口 {    // ***
   tls e16d9cb045d7@gmail.com
   forward_proxy {
-    basic_auth 用户名 密码   // ***
+    basic_auth 用户名 密码   // *** 多写几行就有多个用户, 详见官方文档 https://github.com/klzgrad/forwardproxy/?tab=readme-ov-file#caddyfile-syntax-server-configuration
     hide_ip
     hide_via
     probe_resistance
