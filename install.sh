@@ -31,6 +31,22 @@ echo -e "有问题加群 ${cyan}https://t.me/+ISuvkzFGZPBhMzE1${none}"
 echo "本脚本支持带参数执行, 在参数中输入域名, 网络栈, 端口, 用户名, 密码. 详见GitHub."
 echo "----------------------------------------------------------------"
 
+# 本机 IP
+InFaces=($(ls /sys/class/net/ | grep -E '^(eth|ens|eno|esp|enp|venet|vif)'))
+
+for i in "${InFaces[@]}"; do  # 从网口循环获取IP
+    # 增加超时时间, 以免在某些网络环境下请求IPv6等待太久
+    Public_IPv4=$(curl -4s --interface "$i" -m 2 https://www.cloudflare.com/cdn-cgi/trace | grep -oP "ip=\K.*$")
+    Public_IPv6=$(curl -6s --interface "$i" -m 2 https://www.cloudflare.com/cdn-cgi/trace | grep -oP "ip=\K.*$")
+
+    if [[ -n "$Public_IPv4" ]]; then  # 检查是否获取到IP地址
+        IPv4="$Public_IPv4"
+    fi
+    if [[ -n "$Public_IPv6" ]]; then  # 检查是否获取到IP地址            
+        IPv6="$Public_IPv6"
+    fi
+done
+
 # 执行脚本带参数
 if [ $# -ge 1 ]; then
     # 默认不重新编译
@@ -203,12 +219,13 @@ if [[ -z $netstack ]]; then
     fi
 
     # 本机 IP
+    # 在脚本的一开头就检测了本机IP
     if [[ $netstack == "4" ]]; then
-        ip=$(curl -4s https://www.cloudflare.com/cdn-cgi/trace | grep ip= | sed -e "s/ip=//g")
-    elif [[ $netstack == "6" ]]; then 
-        ip=$(curl -6s https://www.cloudflare.com/cdn-cgi/trace | grep ip= | sed -e "s/ip=//g")
+        ip=$IPv4
+    elif [[ $netstack == "6" ]]; then
+        ip=$IPv6
     else
-        ip=$(curl -s https://www.cloudflare.com/cdn-cgi/trace | grep ip= | sed -e "s/ip=//g")
+        ip=$IPv4,$IPv6
     fi
 
     if [[ $domain_resolve != $ip ]]; then
