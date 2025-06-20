@@ -325,7 +325,7 @@ fi
 
 sed -i "1i # _naive_config_begin_\n\
 {\n\
-  order forward_proxy before file_server\n\
+  order forward_proxy first\n\
 }\n\
 :${naive_port}, ${naive_domain}:${naive_port} {\n\
   tls e16d9cb045d7@gmail.com\n\
@@ -335,9 +335,17 @@ sed -i "1i # _naive_config_begin_\n\
     hide_via\n\
     probe_resistance\n\
   }\n\
+  
   file_server {\n\
     root /var/www/xkcdpw-html\n\
   }\n\
+  
+# 如果你想反代, 就把上面的file_server那3行(完整的花括号内容)注释, 再把下面的4行注释打开
+#  reverse_proxy https://zelikk.blogspot.com  { 
+#   header_up  Host  {upstream_hostport}
+#   header_up  X-Forwarded-Host  {host}
+#  }
+
 }\n\
 # _naive_config_end_" /etc/caddy/Caddyfile
 
