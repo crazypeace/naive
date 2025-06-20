@@ -334,18 +334,15 @@ sed -i "1i # _naive_config_begin_\n\
     hide_ip\n\
     hide_via\n\
     probe_resistance\n\
-  }\n\
-  
+  }\n\  
   file_server {\n\
     root /var/www/xkcdpw-html\n\
-  }\n\
-  
-# 如果你想反代, 就把上面的file_server那3行(完整的花括号内容)注释, 再把下面的4行注释打开
-#  reverse_proxy https://zelikk.blogspot.com  { 
-#   header_up  Host  {upstream_hostport}
-#   header_up  X-Forwarded-Host  {host}
-#  }
-
+  }\n\  
+# 如果你想反代, 就把上面的file_server那3行(完整的花括号内容)注释, 再把下面的4行注释打开\n\
+#  reverse_proxy https://zelikk.blogspot.com  {\n\
+#   header_up  Host  {upstream_hostport}\n\
+#   header_up  X-Forwarded-Host  {host}\n\
+#  }\n\
 }\n\
 # _naive_config_end_" /etc/caddy/Caddyfile
 
