@@ -154,7 +154,7 @@ if [[ "$not_rebuild" == [yY] ]]; then
     cd /tmp
     rm caddy-forwardproxy-naive.tar.xz
     rm -r caddy-forwardproxy-naive
-    wget https://github.com/klzgrad/forwardproxy/releases/download/v2.7.5-caddy2-naive2/caddy-forwardproxy-naive.tar.xz
+    wget https://github.com/klzgrad/forwardproxy/releases/download/v2.10.0-naive/caddy-forwardproxy-naive.tar.xz
     tar -xf caddy-forwardproxy-naive.tar.xz
     cd caddy-forwardproxy-naive
     ./caddy version
