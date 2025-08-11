@@ -59,7 +59,7 @@ echo "hello world" > /var/www/html/index.html
 # 在Caddyfile的顶部添加下面这一段
 ```
 {
-  order forward_proxy before file_server
+  order forward_proxy first
 }
 :自定义端口, 你的naive域名:自定义端口 {    // ***
   tls e16d9cb045d7@gmail.com
