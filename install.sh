@@ -31,6 +31,9 @@ echo -e "有问题加群 ${cyan}https://t.me/+q5WPfGjtwukyZjhl${none}"
 echo "本脚本支持带参数执行, 在参数中输入域名, 网络栈, 端口, 用户名, 密码. 详见GitHub."
 echo "----------------------------------------------------------------"
 
+# 确保有 curl 和 wget
+apt install -y curl wget
+
 # 本机 IP
 InFaces=($(ls /sys/class/net/ | grep -E '^(eth|ens|eno|esp|enp|venet|vif)'))
 
@@ -97,7 +100,7 @@ pause
 
 # 准备
 apt update
-apt install -y sudo curl wget git jq qrencode
+apt install -y sudo git jq qrencode
 apt install -y xz-utils
 
 # 安装Caddy最新版
