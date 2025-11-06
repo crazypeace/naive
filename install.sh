@@ -100,7 +100,7 @@ pause
 
 # 准备
 apt update
-apt install -y sudo git jq qrencode
+apt install -y curl wget sudo git jq qrencode
 apt install -y xz-utils
 
 # 安装Caddy最新版
