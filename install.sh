@@ -326,28 +326,33 @@ if [[ -n $begin_line && -n $end_line ]]; then
   sed -i "${begin_line},${end_line}d" /etc/caddy/Caddyfile
 fi
 
-sed -i "1i # _naive_config_begin_\n\
-{\n\
-  order forward_proxy first\n\
-}\n\
-:${naive_port}, ${naive_domain}:${naive_port} {\n\
-  tls e16d9cb045d7@gmail.com\n\
-  forward_proxy {\n\
-    basic_auth ${naive_user} ${naive_pass}\n\
-    hide_ip\n\
-    hide_via\n\
-    probe_resistance\n\
-  }\n\  
-  file_server {\n\
-    root /var/www/xkcdpw-html\n\
-  }\n\  
-# 如果你想反代, 就把上面的file_server那3行(完整的花括号内容)注释, 再把下面的4行注释打开\n\
-#  reverse_proxy https://zelikk.blogspot.com  {\n\
-#   header_up  Host  {upstream_hostport}\n\
-#   header_up  X-Forwarded-Host  {host}\n\
-#  }\n\
-}\n\
-# _naive_config_end_" /etc/caddy/Caddyfile
+cat > /tmp/caddy_naive_config.txt << EOF
+# _naive_config_begin_
+{
+  order forward_proxy first
+}
+:${naive_port}, ${naive_domain}:${naive_port} {
+  tls e16d9cb045d7@gmail.com
+  forward_proxy {
+    basic_auth ${naive_user} ${naive_pass}
+    hide_ip
+    hide_via
+    probe_resistance
+  }
+  file_server {
+    root /var/www/xkcdpw-html
+  }
+# 如果你想反代, 就把上面的file_server那3行(完整的花括号内容)注释, 再把下面的4行注释打开
+# reverse_proxy https://zelikk.blogspot.com {
+#  header_up Host {upstream_hostport}
+#  header_up X-Forwarded-Host {host}
+# }
+}
+# _naive_config_end_
+EOF
+
+# 2. 使用 'r' (read) 命令将临时文件的内容插入到文件开头
+sed -i '0r /tmp/caddy_naive_config.txt' /etc/caddy/Caddyfile
 
 # 启动NaïveProxy服务端(Caddy)
 echo
