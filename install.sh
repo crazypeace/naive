@@ -50,6 +50,11 @@ for i in "${InFaces[@]}"; do  # 从网口循环获取IP
     fi
 done
 
+# 通过IP, host, 时区, 生成UUID. 重装脚本不改变, 不改变节点信息, 方便个人使用
+uuidSeed=${IPv4}${IPv6}$(cat /proc/sys/kernel/hostname)$(timedatectl | awk '/Time zone/ {print $3}')
+default_uuid=$(curl -sL https://www.uuidtools.com/api/generate/v3/namespace/ns:dns/name/${uuidSeed} | grep -oP '[^-]{8}-[^-]{4}-[^-]{4}-[^-]{4}-[^-]{12}')
+default_pwd=$(echo "$default_uuid" | cut -d'-' -f5)
+
 # 执行脚本带参数
 if [ $# -ge 1 ]; then
     # 默认不重新编译
@@ -80,7 +85,7 @@ if [ $# -ge 1 ]; then
     #第4个参数是 用户名
     naive_user=${4}
     if [[ -z $naive_user ]]; then
-        naive_user=$(openssl rand -hex 8)
+        naive_user=$default_pwd
     fi
 
     #第5个参数是 密码
