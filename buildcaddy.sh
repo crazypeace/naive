@@ -38,7 +38,7 @@ esac
 
 # 安装 Go 编译环境
 mkdir -p /tmp/go_naive_caddy && cd $_
-rm *
+rm -r *
 wget "https://go.dev/dl/${GO_LATEST_VER}.linux-${SYSTEM_ARCH}.tar.gz"
 rm -rf /usr/local/go && tar -C /usr/local -xzf go*.tar.gz
 export PATH=$PATH:/usr/local/go/bin
