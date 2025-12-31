@@ -121,6 +121,10 @@ bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abc.mydo
 bash <(curl -L https://github.com/crazypeace/naive/raw/main/install.sh) abc.mydomain.com 6 14443 username password
 ```
 
+## 结合IP证书的用法
+https://zelikk.blogspot.com/2025/12/naiveproxy-ip-tls-without-domain.html
+
+
 ## 用你的STAR告诉我这个Repo对你有用 Welcome STARs! :)
 
 [![Stargazers over time](https://starchart.cc/crazypeace/naive.svg)](https://starchart.cc/crazypeace/naive)
