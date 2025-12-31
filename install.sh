@@ -350,7 +350,6 @@ cat > /tmp/caddy_naive_config.txt << EOF
 # 如果你想反代, 就把上面的file_server那3行(完整的花括号内容)注释, 再把下面的4行注释打开
 # reverse_proxy https://zelikk.blogspot.com {
 #  header_up Host {upstream_hostport}
-#  header_up X-Forwarded-Host {host}
 # }
 }
 # _naive_config_end_
